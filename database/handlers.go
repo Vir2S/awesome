@@ -6,6 +6,35 @@ import (
 	"database/sql"
 )
 
+func GetAllApiKeysFromDatabase() ([]types.ApiKeys, error) {
+	db, err := sql.Open("mysql", settings.Database)
+	if err != nil {
+		return nil, err
+	}
+	defer db.Close()
+
+	rows, err := db.Query(getAllApiKeysQuery())
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var apikeys []types.ApiKeys
+	for rows.Next() {
+		var ak types.ApiKeys
+		err := rows.Scan(&ak.ApiKey)
+		if err != nil {
+			return nil, err
+		}
+		apikeys = append(apikeys, ak)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return apikeys, nil
+}
+
 func GetProfilesFromDatabase() ([]types.UserProfile, error) {
 	db, err := sql.Open("mysql", settings.Database)
 	if err != nil {

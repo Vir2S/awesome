@@ -21,6 +21,8 @@ func NewServer(listenAddr string) *Server {
 
 func (s *Server) Start() error {
 	router := mux.NewRouter()
+	router.Use(authMiddleware)
+
 	router.HandleFunc("/profile", s.handleGetProfiles).Methods("GET")
 	router.HandleFunc("/profile/{username}", s.handleGetUserByUsername).Methods("GET")
 	return http.ListenAndServe(s.listenAddr, router)
