@@ -1,5 +1,9 @@
 package database
 
+func getAllApiKeysQuery() string {
+	return "SELECT api_key FROM auth;"
+}
+
 func GetAllProfilesQuery() string {
 	return "SELECT user.username, user_profile.user_id," +
 		" user_profile.first_name, user_profile.last_name, user_profile.city, user_data.school" +
